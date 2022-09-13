@@ -4,10 +4,8 @@
       <%= link_to("Rails 101", root_path, class: "navbar-brand") %>
     </div>
     <div class="collapse navbar-collapse justify-content-end" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li>
-          <%= link_to("登入", "#") %>
-        </li>
+      <ul class="nav navbar-nav gap-2">
+        <%= isActiveUser(current_user) %>
       </ul>
     </div>
   </div>
