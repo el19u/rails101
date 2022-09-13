@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   before_action(:find_group, only: [:show, :edit, :update, :destroy])
+  before_action(:set_group, only: [:new])
 
   def index
     @groups = Group.order(created_at: :desc)
