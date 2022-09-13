@@ -1,6 +1,6 @@
 <% if flash.any? %>
   <% user_facing_flashes.each do |key, value| %>
-    <div class="alert alert-dismissable alert-<%= flash_class(key) %>">
+    <div class="d-flex alert alert-dismissable alert-<%= flash_class(key) %>">
       <button class="btn-close" data-dismiss="alert"></button>
       <%= value %>
     </div>
