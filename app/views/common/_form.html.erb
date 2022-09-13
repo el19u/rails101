@@ -1,0 +1,23 @@
+<%= form_with(model: group, submit: submit) do |form| %>
+  <% if group.errors.any? %>
+    <div class="error_explanation">
+      <ul>
+      <% group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label(:title, "討論版名稱") %>
+    <%= form.text_field(:title, class: "form-control") %>
+  </div>
+  <div class="field">
+    <%= form.label(:description, "討論版簡介") %>
+    <%= form.text_area(:description, class: "form-control") %>
+  </div>
+  <div class="actions">
+    <%= form.submit(submit, class: "btn btn-primary") %>
+  </div>
+<% end %>
