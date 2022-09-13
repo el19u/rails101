@@ -1,10 +1,11 @@
 class GroupsController < ApplicationController
+  before_action(:find_group, only: [:show, :edit, :update, :destroy])
+
   def index
     @groups = Group.order(created_at: :desc)
   end
 
   def show
-    @group = Group.find(params[:id])
   end
 
   def new
@@ -14,24 +15,24 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
-      redirect_to groups_path, notice: '新增群組成功'
+      redirect_to groups_path, notice: "新增群組成功"
     else
       render :new
     end
   end
 
   def edit
-    @group = Group.find(params[:id])
   end
 
   def update
-    @group = Group.find(params[:id])
-    @group.update(group_params)
-    redirect_to root_path
+    if @group.update(group_params)
+      redirect_to groups_path, notice: "更新群組成功"
+    else
+      render :edit
+    end
   end
 
   def destroy
-    @group = Group.find(params[:id])
     @group.destroy
     redirect_to root_path, alert: "Group deleted"
   end
@@ -40,5 +41,9 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:title, :description)
+  end
+
+  def find_group
+    @group = Group.find(params[:id])
   end
 end

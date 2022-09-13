@@ -1,23 +1,11 @@
-<%= form_with(model: group, submit: submit) do |form| %>
-  <% if group.errors.any? %>
-    <div class="error_explanation">
-      <ul>
-      <% group.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label(:title, "討論版名稱") %>
-    <%= form.text_field(:title, class: "form-control") %>
+<%= simple_form_for(group, submit: submit) do |form| %>
+  <div class="form-group">
+    <%= form.input(:title, label: "討論版名稱", error: "Ttile cannot be blank", input_html: {class: "form-control"}) %>
   </div>
-  <div class="field">
-    <%= form.label(:description, "討論版簡介") %>
-    <%= form.text_area(:description, class: "form-control") %>
+  <div class="form-group">
+    <%= form.input(:description,label: "討論版簡介", input_html: {class: "form-control"}) %>
   </div>
   <div class="actions">
-    <%= form.submit(submit, class: "btn btn-primary") %>
+    <%= form.submit(submit, class: "btn btn-primary", data: {disable_with: "Submitting..." }) %>
   </div>
 <% end %>
