@@ -8,6 +8,7 @@ class GroupsController < ApplicationController
   end
   
   def show
+    @posts = @group.posts
   end
 
   def new
