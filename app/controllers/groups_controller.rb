@@ -1,14 +1,15 @@
 class GroupsController < ApplicationController
   before_action(:find_group, only: [:show, :edit, :update, :destroy])
-  before_action(:authenticate_user!, only: [:new, :create])
-
+  before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
+  before_action(:check_owner, only: [:edit, :update, :destroy])
+  
   def index
     @groups = Group.order(created_at: :desc)
   end
   
   def show
   end
-  
+
   def new
     @group = Group.new
   end
@@ -47,5 +48,9 @@ class GroupsController < ApplicationController
 
   def find_group
     @group = Group.find(params[:id])
+  end
+
+  def check_owner
+    redirect_to root_path, alert: "使用者無權限" if current_user != @group.user
   end
 end
