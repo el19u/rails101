@@ -1,10 +1,12 @@
 class GroupsController < ApplicationController
   before_action(:find_group, only: [:show, :edit, :update, :destroy])
-
+  before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
+  before_action(:check_owner, only: [:edit, :update, :destroy])
+  
   def index
     @groups = Group.order(created_at: :desc)
   end
-
+  
   def show
   end
 
@@ -13,9 +15,10 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = Group.new(group_params)
+    @group = current_user.groups.build(group_params)
+
     if @group.save
-      redirect_to groups_path, notice: "新增群組成功"
+      redirect_to(groups_path, notice: "新增群組成功")
     else
       render :new
     end
@@ -26,7 +29,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
-      redirect_to groups_path, notice: "更新群組成功"
+      redirect_to(groups_path, notice: "更新群組成功")
     else
       render :edit
     end
@@ -45,5 +48,9 @@ class GroupsController < ApplicationController
 
   def find_group
     @group = Group.find(params[:id])
+  end
+
+  def check_owner
+    redirect_to root_path, alert: "使用者無權限" if current_user != @group.user
   end
 end
