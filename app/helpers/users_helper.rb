@@ -1,6 +1,6 @@
 module UsersHelper
-  def isActiveUser(current_user)
-    if current_user.nil?
+  def is_active_user?(current_user)
+    if current_user.blank?
       content_tag(:li, link_to("登入", new_user_session_path)) <<
       content_tag(:li, link_to("註冊", new_user_registration_path))
     else
