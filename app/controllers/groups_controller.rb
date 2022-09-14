@@ -4,11 +4,12 @@ class GroupsController < ApplicationController
   before_action(:check_owner, only: [:edit, :update, :destroy])
   
   def index
-    @groups = Group.order(created_at: :desc)
+    @groups = Group.recent
   end
   
   def show
     @posts = @group.posts
+    @posts = @group.posts.recent
   end
 
   def new
