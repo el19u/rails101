@@ -8,8 +8,7 @@ class GroupsController < ApplicationController
   end
   
   def show
-    @posts = @group.posts
-    @posts = @group.posts.recent
+    @posts = @group.posts.recent.page(params[:page]).per(5)
   end
 
   def new
