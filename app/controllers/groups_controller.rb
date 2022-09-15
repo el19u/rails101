@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action(:find_group, only: [:show, :edit, :update, :destroy])
+  before_action(:find_group, only: [:show, :edit, :update, :destroy, :join, :quit])
   before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
   before_action(:check_owner, only: [:edit, :update, :destroy])
   
@@ -39,6 +39,26 @@ class GroupsController < ApplicationController
   def destroy
     @group.destroy
     redirect_to root_path, alert: "Group deleted"
+  end
+
+  def join
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice] = "加入本群組成功！"
+    else
+      flash[:warning] = "你已經是本群組成員了！"
+    end
+  end
+
+  def quit
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:alert] = "已退出本群組！"
+    else
+      flash[:warning] = "非群組成員，無法退出"
+    end
+
+    redirect_to group_path(@group)
   end
 
   private
