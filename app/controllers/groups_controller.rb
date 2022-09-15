@@ -26,22 +26,6 @@ class GroupsController < ApplicationController
     end
   end
 
-  def edit
-  end
-
-  def update
-    if @group.update(group_params)
-      redirect_to(groups_path, notice: "更新群組成功")
-    else
-      render :edit
-    end
-  end
-
-  def destroy
-    @group.destroy
-    redirect_to root_path, alert: "Group deleted"
-  end
-
   def join
     if !current_user.is_member_of?(@group)
       current_user.join!(@group)
@@ -49,6 +33,8 @@ class GroupsController < ApplicationController
     else
       flash[:warning] = "你已經是本群組成員了！"
     end
+    
+    redirect_to group_path(@group)
   end
 
   def quit

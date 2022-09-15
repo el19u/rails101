@@ -8,6 +8,7 @@ module UsersHelper
         content_tag(:button, "Hi! #{current_user.email}", class: "btn btn-secondary dropdown-toggle", data: {bs_toggle: "dropdown"}) <<
         content_tag(:ul, class: "dropdown-menu") do
           content_tag(:li, link_to("我的群組", account_groups_path )) <<
+          content_tag(:li, link_to("我的文章", account_posts_path )) <<
           content_tag(:li, link_to("登出", destroy_user_session_path, method: :delete))
         end
       end
