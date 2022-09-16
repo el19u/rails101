@@ -1,8 +1,8 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
-  before_action :is_group_member, only: [:new, :create]
-
+  before_action :find_post, only: [:new, :create, :edit, :update, :destroy]
+  
   def new
     return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
     
@@ -27,7 +27,7 @@ class PostsController < ApplicationController
   end
 
   def update
-    if @group.update(group_params)
+    if @post.update(post_params)
       redirect_to(groups_path, notice: "更新群組成功")
     else
       render :edit
@@ -49,7 +49,11 @@ class PostsController < ApplicationController
     @group = Group.find(params[:group_id])
   end
 
+  def find_post
+    @post = Post.find(params[:id])
+  end
+
   def is_group_member?
-    redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
   end
 end

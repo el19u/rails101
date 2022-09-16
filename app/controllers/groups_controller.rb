@@ -26,6 +26,22 @@ class GroupsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @group.update(group_params)
+      redirect_to(groups_path, notice: "更新群組成功")
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @group.destroy
+    redirect_to(groups_path, alert: "Group deleted")
+  end
+
   def join
     if !current_user.is_member_of?(@group)
       current_user.join!(@group)
@@ -34,28 +50,6 @@ class GroupsController < ApplicationController
       flash[:warning] = "你已經是本群組成員了！"
     end
     
-    redirect_to group_path(@group)
-  end
-
-  def quit
-    if current_user.is_member_of?(@group)
-      current_user.quit!(@group)
-      flash[:alert] = "已退出本群組！"
-    else
-      flash[:warning] = "非群組成員，無法退出"
-    end
-
-    redirect_to group_path(@group)
-  end
-
-  def join
-    if !current_user.is_member_of?(@group)
-      current_user.join!(@group)
-      flash[:notice] = "加入本群組成功！"
-    else
-      flash[:warning] = "你已經是本群組成員了！"
-    end
-
     redirect_to group_path(@group)
   end
 
@@ -81,6 +75,6 @@ class GroupsController < ApplicationController
   end
 
   def check_owner
-    redirect_to root_path, alert: "使用者無權限" if current_user != @group.user
+   return redirect_to(root_path, alert: "使用者無權限") if current_user != @group.user
   end
 end

@@ -33,8 +33,9 @@
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.created_at %></td>
-        </tr>
+          <%= link_to("click,me!", edit_group_post_path(@group,post)) %>
       <% end %>
+        </tr>
     </tbody>
     <div>
       <%= paginate @posts %>
