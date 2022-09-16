@@ -1,12 +1,17 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
+  before_action :is_group_member, only: [:new, :create]
 
   def new
+    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+    
     @post = Post.new
   end
 
   def create
+    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+
     @post = Post.new(post_params)
     @post.group = @group
     @post.user = current_user
@@ -42,5 +47,9 @@ class PostsController < ApplicationController
   
   def find_group
     @group = Group.find(params[:group_id])
+  end
+
+  def is_group_member?
+    redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
   end
 end

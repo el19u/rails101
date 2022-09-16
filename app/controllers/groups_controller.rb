@@ -55,6 +55,8 @@ class GroupsController < ApplicationController
     else
       flash[:warning] = "你已經是本群組成員了！"
     end
+
+    redirect_to group_path(@group)
   end
 
   def quit
