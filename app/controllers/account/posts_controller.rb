@@ -8,12 +8,6 @@ class Account::PostsController < ApplicationController
   def destroy
     @post = Post.find(params[:id])
     @post.destroy
-    redirect_to account_posts_path, alert: "Post deleted"
-  end
-
-  private
-
-  def find_group
-    @group = Post.find(params[:post_id])
+    redirect_to account_posts_path, alert: "刪除成功"
   end
 end
