@@ -2,6 +2,7 @@ class GroupsController < ApplicationController
   before_action(:find_group, only: [:show, :edit, :update, :destroy, :join, :quit])
   before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
   before_action(:check_owner, only: [:edit, :update, :destroy])
+  before_action(:authenticate_user!, only: [:join, :quit])
   
   def index
     @groups = Group.recent
