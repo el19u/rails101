@@ -1,16 +1,16 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
-  before_action :find_post, only: [:new, :create, :edit, :update, :destroy]
+  before_action :find_post, only: [:edit, :update, :destroy]
   
   def new
-    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+    # return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
     
     @post = Post.new
   end
 
   def create
-    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+    # return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
 
     @post = Post.new(post_params)
     @post.group = @group
@@ -35,8 +35,8 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    @group.destroy
-    redirect_to @group, alert: "Group deleted"
+    @post.destroy
+    redirect_to(@group, alert: "Group deleted")
   end
 
   private
