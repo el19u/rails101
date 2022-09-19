@@ -33,8 +33,10 @@
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.created_at %></td>
-          <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
-          <td><%= link_to("delete", group_post_path(@group,post), method: :delete, data: {confirm: "Are you sure?"}) %></td>
+          <% if current_user && current_user.is_member_of?(@group) %>
+            <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
+            <td><%= link_to("delete", group_post_path(@group,post), method: :delete, data: {confirm: "Are you sure?"}) %></td>
+          <% end %>
       <% end %>
         </tr>
     </tbody>
