@@ -1,13 +1,14 @@
+# frozen_string_literal: true
 class GroupsController < ApplicationController
   before_action(:find_group, only: [:show, :edit, :update, :destroy, :join, :quit])
   before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
   before_action(:check_owner, only: [:edit, :update, :destroy])
   before_action(:authenticate_user!, only: [:join, :quit])
-  
+
   def index
     @groups = Group.recent
   end
-  
+
   def show
     @posts = @group.posts.recent.page(params[:page]).per(5)
   end
@@ -23,7 +24,7 @@ class GroupsController < ApplicationController
       current_user.join!(@group)
       redirect_to(groups_path, notice: "新增群組成功")
     else
-      render :new
+      render "new"
     end
   end
 
@@ -34,7 +35,7 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       redirect_to(groups_path, notice: "更新群組成功")
     else
-      render :edit
+      render "edit"
     end
   end
 
@@ -50,7 +51,7 @@ class GroupsController < ApplicationController
     else
       flash[:warning] = "你已經是本群組成員了！"
     end
-    
+
     redirect_to group_path(@group)
   end
 
@@ -76,6 +77,6 @@ class GroupsController < ApplicationController
   end
 
   def check_owner
-   return redirect_to(root_path, alert: "使用者無權限") if current_user != @group.user
+    return redirect_to(root_path, alert: "使用者無權限") if current_user != @group.user
   end
 end

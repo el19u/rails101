@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
   before_action :find_post, only: [:edit, :update, :destroy]
   before_action :is_group_member?, only: [:new, :create]
-  
+
   def new
     @post = current_user.posts.new
   end
@@ -16,7 +17,7 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to(group_path(@group), notice: "新增文章成功")
     else
-      render :new
+      render "new"
     end
   end
 
@@ -27,7 +28,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to(@group, notice: "更新群組成功")
     else
-      render :edit
+      render "edit"
     end
   end
 
@@ -41,7 +42,7 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:content)
   end
-  
+
   def find_group
     @group = Group.find(params[:group_id])
   end
