@@ -11,7 +11,9 @@
     </span>
   </div>
   <div class="group">
-    <%= link_to("新增文章", new_group_post_path(@group), class: "btn btn-default float-end" ) %>
+    <% if current_user && current_user.is_member_of?(@group) %>
+      <%= link_to("新增文章", new_group_post_path(@group), class: "btn btn-default float-end" ) %>
+    <% end %>
   </div>
   <% if current_user && current_user == @group.user %>
     <%= link_to("編輯", edit_group_path(@group), class: "btn btn-primary float-end") %>
@@ -31,8 +33,12 @@
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.created_at %></td>
-        </tr>
+          <% if current_user && current_user.is_member_of?(@group) %>
+            <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
+            <td><%= link_to("delete", group_post_path(@group,post), method: :delete, data: {confirm: "Are you sure?"}) %></td>
+          <% end %>
       <% end %>
+        </tr>
     </tbody>
     <div>
       <%= paginate @posts %>
