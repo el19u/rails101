@@ -9,7 +9,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = current_user.posts.new(post_params)
+    @post = posts.new(post_params)
     @post.group = @group
     @post.user = current_user
 
@@ -25,7 +25,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to(@post, notice: "更新群組成功")
+      redirect_to(@group, notice: "更新群組成功")
     else
       render :edit
     end
