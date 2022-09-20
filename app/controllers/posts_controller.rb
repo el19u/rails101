@@ -51,6 +51,6 @@ class PostsController < ApplicationController
   end
 
   def is_group_member?
-    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
+    return redirect_to(@group, alert: "無權限!") if !current_user.is_member_of?(@group)
   end
 end
