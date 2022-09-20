@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
   def join
     if !current_user.is_member_of?(@group)
       current_user.join!(@group)
-      flash[:notice] = "加入本群組成功！"
+      flash[:notice] = "加入群組成功！"
     else
       flash[:warning] = "你已經是本群組成員了！"
     end
@@ -58,7 +58,7 @@ class GroupsController < ApplicationController
   def quit
     if current_user.is_member_of?(@group)
       current_user.quit!(@group)
-      flash[:alert] = "已退出本群組！"
+      flash[:alert] = "已退出群組！"
     else
       flash[:warning] = "非群組成員，無法退出"
     end
@@ -77,6 +77,6 @@ class GroupsController < ApplicationController
   end
 
   def check_owner
-    return redirect_to(root_path, alert: "使用者無權限") if current_user != @group.user
+    return redirect_to(root_path, alert: "使用者無權限，請先加入群組") if current_user != @group.user
   end
 end
