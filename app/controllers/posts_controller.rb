@@ -2,22 +2,19 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
   before_action :find_post, only: [:edit, :update, :destroy]
+  before_action :is_group_member?, only: [:new, :create]
   
   def new
-    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
-    
-    @post = Post.new
+    @post = current_user.posts.new
   end
 
   def create
-    return redirect_to(@group), alert: "無權限!" if !current_user.is_member_of?(@group)
-
-    @post = Post.new(post_params)
+    @post = current_user.posts.new(post_params)
     @post.group = @group
     @post.user = current_user
 
     if @post.save
-      redirect_to group_path(@group)
+      redirect_to(group_path(@group), notice: "新增文章成功")
     else
       render :new
     end
@@ -28,7 +25,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      redirect_to(groups_path, notice: "更新群組成功")
+      redirect_to(@post, notice: "更新群組成功")
     else
       render :edit
     end
@@ -36,7 +33,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to(@group, alert: "Group deleted")
+    redirect_to(@group, alert: "成功刪除群組")
   end
 
   private
