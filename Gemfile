@@ -18,6 +18,7 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "devise"
 gem "kaminari"
 gem "simple_form"
+gem "aasm"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
