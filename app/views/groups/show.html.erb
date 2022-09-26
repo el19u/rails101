@@ -1,3 +1,5 @@
+<% is_in_group = current_user && current_user.is_member_of?(@group) %>
+
 <div class="col-md 12">
   <% if @group.user == current_user %>
     <table class="table">
@@ -16,7 +18,7 @@
             <td><%= post.user.email %></td>
             <td><%= post.created_at %></td>
             <td><%= post.status %></td>
-            <td><%= link_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), method: :post, class: "btn btn-success") %></td>
+            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), class: "btn btn-success") %></td>
             <td><%= link_to("審核不通過", manage_group_post_path(@group, post, post: {status: "return_back"}), method: :post, class: "btn btn-danger") %></td>
           </tr>
         <% end %>
@@ -26,7 +28,7 @@
 
   <div class="group">
     <span class="float-end">
-      <% if current_user && current_user.is_member_of?(@group) %>
+      <% if is_in_group %>
         <label class="label label-success"> 群組成員 </label>
         <%= link_to("離開群組", quit_group_path(@group), method: :post, class: "btn btn-default") %>
       <% else %>
@@ -36,7 +38,7 @@
     </span>
   </div>
   <div class="group">
-    <% if current_user && current_user.is_member_of?(@group) %>
+    <% if is_in_group %>
       <%= link_to("新增文章", new_group_post_path(@group), class: "btn btn-default float-end" ) %>
     <% end %>
   </div>
@@ -58,7 +60,7 @@
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.created_at %></td>
-          <% if current_user && current_user.is_member_of?(@group) %>
+          <% if is_in_group %>
             <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
             <td><%= link_to("delete", group_post_path(@group,post), method: :delete, data: {confirm: "Are you sure?"}) %></td>
           <% end %>

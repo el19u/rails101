@@ -39,7 +39,6 @@ class PostsController < ApplicationController
 
   def manage
     @post.update(post_params)
-
     status = @post.status
 
     case status

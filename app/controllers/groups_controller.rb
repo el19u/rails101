@@ -10,8 +10,8 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @published_posts = @group.posts.published.recent.page(params[:page]).per(5)
-    @pendding_posts = @group.posts.pendding.recent
+    @published_posts = @group.posts.includes(:user).published.recent.page(params[:page]).per(5)
+    @pendding_posts = @group.posts.includes(:user).pendding.recent
   end
 
   def new
