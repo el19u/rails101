@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class PostsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
-  before_action :find_group, only: [:new, :create, :edit, :update, :destroy]
-  before_action :find_post, only: [:edit, :update, :destroy]
+  before_action :find_group, only: [:new, :create, :edit, :update, :destroy, :manage]
+  before_action :find_post, only: [:edit, :update, :destroy, :manage]
   before_action :is_group_member?, only: [:new, :create]
 
   def new
@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = posts.new(post_params)
+    @post = Post.new(post_params)
     @post.group = @group
     @post.user = current_user
 
@@ -37,10 +37,15 @@ class PostsController < ApplicationController
     redirect_to(@group, alert: "成功刪除群組")
   end
 
+  def manage
+    @post.update(post_params)
+    redirect_to(@group, notice: "通過文章審核")
+   end
+
   private
 
   def post_params
-    params.require(:post).permit(:content)
+    params.require(:post).permit(:content, :status)
   end
 
   def find_group
