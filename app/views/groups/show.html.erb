@@ -19,7 +19,7 @@
             <td><%= post.created_at %></td>
             <td><%= post.status %></td>
             <td><%= button_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), class: "btn btn-success") %></td>
-            <td><%= link_to("審核不通過", manage_group_post_path(@group, post, post: {status: "return_back"}), method: :post, class: "btn btn-danger") %></td>
+            <td><%= button_to("審核不通過", manage_group_post_path(@group, post, post: {status: "return_back"}), class: "btn btn-danger") %></td>
           </tr>
         <% end %>
       </tbody>

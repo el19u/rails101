@@ -46,8 +46,8 @@ class PostsController < ApplicationController
         redirect_to(@group, notice: "通過文章審核")
       when "return_back"
         redirect_to(@group, alert: "不通過文章審核,請重新編輯後再次提交待審")
-      end
-   end
+    end
+  end
 
   private
 

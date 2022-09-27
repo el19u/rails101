@@ -33,12 +33,12 @@ group :development, :test do
 end
 
 group :development do
+  gem "bullet"
   gem "listen", "~> 3.3"
   gem "pry-rails", "~> 0.3.6"
   gem "rack-mini-profiler", "~> 2.0"
   gem "spring"
   gem "web-console", ">= 4.1.0"
-  gem 'bullet'
 end
 
 group :test do
