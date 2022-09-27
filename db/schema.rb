@@ -33,14 +33,6 @@ ActiveRecord::Schema.define(version: 2022_09_23_072853) do
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
-  create_table "messages", force: :cascade do |t|
-    t.text "comment"
-    t.bigint "post_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["post_id"], name: "index_messages_on_post_id"
-  end
-
   create_table "posts", force: :cascade do |t|
     t.text "content"
     t.bigint "group_id", null: false
@@ -67,7 +59,6 @@ ActiveRecord::Schema.define(version: 2022_09_23_072853) do
   add_foreign_key "group_relationships", "groups"
   add_foreign_key "group_relationships", "users"
   add_foreign_key "groups", "users"
-  add_foreign_key "messages", "posts"
   add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
 end
