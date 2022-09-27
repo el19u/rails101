@@ -6,7 +6,7 @@ class GroupsController < ApplicationController
   before_action(:authenticate_user!, only: [:join, :quit])
 
   def index
-    @groups = Group.recent
+    @groups = Group.includes(:user).recent
   end
 
   def show
