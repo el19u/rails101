@@ -26,6 +26,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
+      @post.pendding!
       redirect_to(@group, notice: "更新群組成功")
     else
       render "edit"
@@ -46,6 +47,10 @@ class PostsController < ApplicationController
         redirect_to(@group, notice: "通過文章審核")
       when "return_back"
         redirect_to(@group, alert: "不通過文章審核,請重新編輯後再次提交待審")
+      when "delete_by_owner"
+        redirect_to(@group, alert: "文章已被群組管理員刪除")
+      when "delete_by_user"
+        redirect_to(@group, alert: "文章已被使用者刪除")
     end
   end
 

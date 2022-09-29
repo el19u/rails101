@@ -18,8 +18,9 @@
             <td><%= post.user.email %></td>
             <td><%= post.created_at %></td>
             <td><%= post.status %></td>
-            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), class: "btn btn-success") %></td>
-            <td><%= button_to("審核不通過", manage_group_post_path(@group, post, post: {status: "return_back"}), class: "btn btn-danger") %></td>
+            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), data:{confirm: "Are you sure?"}, class: "btn btn-success") %></td>
+            <td><%= button_to("審核不通過", manage_group_post_path(@group, post, post: {status: "return_back"}), data:{confirm: "Are you sure?"}, class: "btn btn-danger") %></td>
+            <td><%= button_to("刪除文章", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: {confirm: "Are you sure?"}, class: "btn btn-danger") %></td>
           </tr>
         <% end %>
       </tbody>
@@ -49,7 +50,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th>審核狀態</th>
+        <th>#</th>
         <th>文章內容</th>
         <th>作者</th>
         <th>時間</th>
@@ -58,7 +59,11 @@
     <tbody>
       <% @posts.each do |post| %>
         <tr>
-          <td><%= post.status %></td>
+          <% if current_user && current_user == @group.user %>
+            <td><%= post.status %></td>
+            <% else %>
+              <td></td>
+          <% end %>
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.created_at %></td>
