@@ -11,14 +11,14 @@
         </tr>
       </thead>
       <tbody>
-        <% @pendding_posts.each do |post| %>
+        <% @verify_posts.each do |post| %>
           <tr>
             <td><%= post.content %></td>
             <td><%= post.user.email %></td>
             <td><%= post.updated_at %></td>
-            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post: {status: "published"}), data:{confirm: "Are you sure?"}, class: "btn btn-success") %></td>
-            <td><%= button_to("審核不通過", manage_group_post_path(@group, post, post: {status: "decline"}), data:{confirm: "Are you sure?"}, class: "btn btn-danger") %></td>
-            <td><%= button_to("刪除文章", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: {confirm: "Are you sure?"}, class: "btn btn-danger") %></td>
+            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "published"}))%></td>
+            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: "declined"}))%></td>
+            <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: { confirm: "確定要刪除嗎？"})%></td>
           </tr>
         <% end %>
       </tbody>
@@ -28,10 +28,10 @@
   <div class="group">
     <span class="float-end">
       <% if is_in_group %>
-        <label class="label label-success"> 群組成員 </label>
+        <label class="label label-success">群組成員</label>
         <%= link_to("離開群組", quit_group_path(@group), method: :post, class: "btn btn-default") %>
       <% else %>
-        <label class="label label-warning"> 非群組成員 </label>
+        <label class="label label-warning">非群組成員</label>
         <%= link_to("加入群組", join_group_path(@group), method: :post, class: "btn btn-default") %>
       <% end %>
     </span>
@@ -44,6 +44,7 @@
   <% if current_user && current_user == @group.user %>
     <%= link_to("編輯", edit_group_path(@group), class: "btn btn-primary float-end") %>
   <% end %>
+
   <h2><%= @group.title %></h2>
   <table class="table">
     <thead>
@@ -51,38 +52,22 @@
         <th>文章內容</th>
         <th>作者</th>
         <th>時間</th>
-        <th>#</th>
       </tr>
     </thead>
     <tbody>
-      <% @posts.each do |post| %>
-        <tr>
-
-          <% if current_user == post.user && post.status == "decline" || current_user == post.user && post.status == "pendding" || current_user == post.user && post.status == "delete_by_user" %>
-            <td><%= post.content %></td>
-            <td><%= post.user.email %></td>
-            <td><%= post.updated_at %></td>
-            <% if current_user == post.user %>
-              <td><%= post.status %></td>
-            <% end %>
-            <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
-            <td><%= button_to("delete", manage_group_post_path(@group, post, post:{ status: delete_by(current_user, post)}), data: {confirm: "Are you sure?"}) %></td>
-          <% end %>
-          <% if post.status == "published" || current_user.id == @group.id %>
-            <td><%= post.content %></td>
-            <td><%= post.user.email %></td>
-            <td><%= post.updated_at %></td>
-            <% if current_user == post.user || current_user == @group.user %>
-              <td><%= link_to("edit", edit_group_post_path(@group,post)) %></td>
-              <td><%= button_to("delete", manage_group_post_path(@group,post, post: {status: delete_by(current_user, post)}), data: {confirm: "Are you sure?"}) %></td>
-            <% end %>
-          <% end %>
-        </tr>
-      <% end %>
+      <tr>
+        <% @posts.each do |post| %>
+          <td><%= post.content %></td>
+          <td><%= post.user.email %></td>
+          <td><%= post.updated_at %></td>
+        <% end %>
+      </tr>
     </tbody>
+
   </table>
+
   <div>
-    <%= paginate @posts %>
+    <%# <%= paginate @posts %>
   </div>
 </div>
 
