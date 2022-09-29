@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
 
   def show
     @posts = @group.posts.includes(:user).recent.page(params[:page]).per(5)
-    @pendding_posts = @group.posts.includes(:user).where(status: [:pendding, :return_back]).recent
+    @pendding_posts = @group.posts.includes(:user).where(status: [:pendding, :decline]).recent
   end
 
   def new

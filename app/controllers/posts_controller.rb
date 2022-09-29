@@ -33,23 +33,21 @@ class PostsController < ApplicationController
     end
   end
 
-  def destroy
-    @post.destroy
-    redirect_to(@group, alert: "成功刪除群組")
-  end
-
   def manage
-    @post.update(post_params)
-    status = @post.status
+    status = post_params[:status]
 
     case status
       when "published"
-        redirect_to(@group, notice: "通過文章審核")
-      when "return_back"
-        redirect_to(@group, alert: "不通過文章審核,請重新編輯後再次提交待審")
+        @post.published!
+        redirect_to(@group, notice: "文章通過審核")
+      when "decline"
+        @post.declined!
+        redirect_to(@group, alert: "不通過審核")
       when "delete_by_owner"
+        @post.delete_by_owner!
         redirect_to(@group, alert: "文章已被群組管理員刪除")
       when "delete_by_user"
+        @post.delete_by_user!
         redirect_to(@group, alert: "文章已被使用者刪除")
     end
   end
