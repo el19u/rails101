@@ -40,8 +40,8 @@ class PostsController < ApplicationController
       when "published"
         @post.published!
         redirect_to(@group, notice: "文章通過審核")
-      when "decline"
-        @post.declined!
+      when "declined"
+        @post.decline!
         redirect_to(@group, alert: "不通過審核")
       when "delete_by_owner"
         @post.delete_by_owner!
