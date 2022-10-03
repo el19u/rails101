@@ -13,18 +13,18 @@
           <th>時間</th>
         </tr>
       </thead>
-      <tbody>
-        <% @verify_posts.each do |post| %>
-          <tr>
-            <td><%= post.content %></td>
-            <td><%= post.user.email %></td>
-            <td><%= post.updated_at %></td>
-            <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "published"}))%></td>
-            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: "declined"}))%></td>
-            <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: { confirm: "確定要刪除嗎？"})%></td>
-          </tr>
-        <% end %>
-      </tbody>
+    <tbody>
+      <% @verify_posts.each do |post| %>
+        <tr>
+          <td><%= post.content %></td>
+          <td><%= post.user.email %></td>
+          <td><%= post.updated_at %></td>
+          <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "published"}))%></td>
+          <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: "declined"}))%></td>
+          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: { confirm: "確定要刪除嗎？"})%></td>
+        </tr>
+      <% end %>
+    </tbody>
     </table>
   <% end %>
 

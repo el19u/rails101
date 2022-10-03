@@ -28,10 +28,6 @@ class Post < ApplicationRecord
       transitions from: [:pendding, :decline], to: :published
     end
 
-    event :return do
-      transitions from: :published, to: :decline
-    end
-
     event :delete_by_owner do
       transitions from: [:pendding, :published, :decline], to: :delete_by_owner
     end
