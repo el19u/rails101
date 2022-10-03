@@ -49,6 +49,9 @@ class PostsController < ApplicationController
       when "delete_by_user"
         @post.delete_by_user!
         redirect_to(@group, alert: "文章已被使用者刪除")
+      when "block"
+        @post.block!
+        redirect_to(@group, alert: "文章已被管理員封鎖")
     end
   end
 

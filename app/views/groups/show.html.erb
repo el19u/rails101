@@ -13,18 +13,16 @@
           <th>時間</th>
         </tr>
       </thead>
-    <tbody>
-      <% @verify_posts.each do |post| %>
-        <tr>
+      <tbody>
+        <% @verify_posts.each do |post| %>
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
           <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "published"}))%></td>
           <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: "declined"}))%></td>
           <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: "delete_by_owner"}), data: { confirm: "確定要刪除嗎？"})%></td>
-        </tr>
-      <% end %>
-    </tbody>
+        <% end %>
+      </tbody>
     </table>
   <% end %>
 
@@ -85,22 +83,14 @@
     <tbody>
       <% @posts.each do |post| %>
         <tr>
-          <% if post.status != "delete_by_user" %>
-            <td><%= post.content %></td>
-          <% elsif post.status == "delete_by_user" %>
-            <td> - </td>
-          <%end%>
+          <td><%= post.status == "delete_by_user" ? " - " : post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
-          <% if post.status == "delete_by_owner" %>
-            <td> 該文章被管理員刪除 </td>
-          <% end %>
-          <% if post.status == "delete_by_user" %>
-            <td> 該文章被用戶刪除 </td>
-          <% end %>
+          <td><%= post_status_message(post.status) %></td>
           <% if post.status == "published" && current_user == post.user %>
             <td><%= link_to("編輯", edit_group_post_path(@group, post)) %></td>
             <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_by(current_user, post)}), data: { confirm: "確定要刪除嗎？"})%></td>
+            <td><%= button_to("封鎖", manage_group_post_path(@group, post, post: {status: "block"}), data: { confirm: "確定要刪除嗎？"})%></td>
           <% end %>
         </tr>
       <% end %>
