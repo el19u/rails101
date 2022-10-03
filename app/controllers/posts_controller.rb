@@ -52,6 +52,9 @@ class PostsController < ApplicationController
       when "block"
         @post.block!
         redirect_to(@group, alert: "文章已被管理員封鎖")
+      when "update_fail"
+        @post.update_fail!
+        redirect_to(@group, alert: "版主拒絕更新文章")
     end
   end
 
