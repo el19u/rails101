@@ -15,7 +15,8 @@ class Post < ApplicationRecord
     decline: 2,
     delete_by_owner: 3,
     delete_by_user: 4,
-    block: 5
+    block: 5,
+    update_post: 6
   }
 
   aasm column: :status, enum: true do
@@ -25,6 +26,7 @@ class Post < ApplicationRecord
     state :delete_by_owner
     state :delete_by_user
     state :block
+    state :update_post
 
     event :publish do
       transitions from: [:pendding, :decline], to: :published

@@ -26,8 +26,8 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      @post.pendding!
-      redirect_to(@group, notice: "更新群組成功")
+      @post.update_post!
+      redirect_to(group_path(@group), notice: "更新文章成功")
     else
       render "edit"
     end
