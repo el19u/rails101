@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
 
   def show
     @verify_posts = @group.posts.where(status: [:pendding, :update_success]).includes(:user).recent
-    @user_posts = @group.posts.where(status: [:pendding, :decline, :draft]).includes(:user).recent
+    @user_posts = @group.posts.where(status: [:pendding, :decline, :draft], user: current_user).includes(:user).recent
     @posts = @group.posts.where(status: [:published, :delete_by_user, :delete_by_owner, :block, :update_success, :update_fail]).includes(:user).recent.page(params[:page]).per(20)
   end
 

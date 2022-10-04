@@ -39,7 +39,10 @@ class PostsController < ApplicationController
     case status
       when "pendding"
         @post.pendding!
-        redirect_to(group_path(@group), notice: "文章已送審")
+      redirect_to(group_path(@group), notice: "文章已送審")
+      when "draft"
+        @post.draft!
+        redirect_to(group_path(@group), notice: "取消送審")
       when "published"
         @post.published!
         redirect_to(@group, notice: "文章通過審核")

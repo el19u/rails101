@@ -7,5 +7,5 @@ class Group < ApplicationRecord
 
   validates :title, presence: true
 
-  scope :recent, -> { order("update_at DESC") }
+  scope :recent, -> { order("updated_at DESC") }
 end
