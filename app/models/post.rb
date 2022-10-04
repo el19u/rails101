@@ -10,24 +10,26 @@ class Post < ApplicationRecord
   scope :recent, -> { order("created_at DESC") }
 
   enum status: {
-    pendding: 0,
-    published: 1,
-    decline: 2,
-    delete_by_owner: 3,
-    delete_by_user: 4,
-    block: 5,
-    update_post: 6,
-    update_fail: 7
+    draft:0,
+    pendding: 1,
+    published: 2,
+    decline: 3,
+    delete_by_owner: 4,
+    delete_by_user: 5,
+    block: 6,
+    update_success: 7,
+    update_fail: 8
   }
 
   aasm column: :status, enum: true do
-    state :pendding, initial: true
+    state :draft, initial: true
+    state :pendding
     state :published
     state :decline
     state :delete_by_owner
     state :delete_by_user
     state :block
-    state :update_post
+    state :update_success
     state :update_fail
 
     event :publish do

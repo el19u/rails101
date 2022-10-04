@@ -37,6 +37,9 @@ class PostsController < ApplicationController
     status = post_params[:status]
 
     case status
+      when "pendding"
+        @post.pendding!
+        redirect_to(group_path(@group), notice: "文章已送審")
       when "published"
         @post.published!
         redirect_to(@group, notice: "文章通過審核")

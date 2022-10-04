@@ -23,7 +23,7 @@ module PostsHelper
       delete_by_user: "文章已被使用者刪除",
       delete_by_owner: "文章已被群組管理員刪除",
       block: "文章已被管理員封鎖",
-      update_post: "版主審核更新文章",
+      update_success: "版主審核更新文章",
       update_fail: "版主拒絕更新文章"
     }
 
