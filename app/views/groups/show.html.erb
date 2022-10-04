@@ -90,7 +90,13 @@
     <tbody>
       <% @posts.each do |post| %>
         <tr>
-          <td><%= post.status == "delete_by_user" && current_user != post.user ? " - " : post.content %></td>
+          <% if post.status == "delete_by_user" && current_user != post.user %>
+            <td><%= post.content %></td>
+          <% elsif post.status == "block" && current_user == @group.user %>
+            <td><%= post.content %></td>
+          <% else %>
+            <td> - </td>
+          <% end %>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
           <td><%= post_status_message(post.status) %></td>
