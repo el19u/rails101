@@ -7,7 +7,7 @@ class Post < ApplicationRecord
 
   validates :content, presence: true
 
-  scope :recent, -> { order("created_at DESC") }
+  scope :recent, -> { order(updated_at: :desc) }
 
   enum status: {
     draft:0,
@@ -17,8 +17,8 @@ class Post < ApplicationRecord
     delete_by_owner: 4,
     delete_by_user: 5,
     block: 6,
-    update_success: 7,
-    update_fail: 8
+    update_fail: 7,
+    update_verify: 8
   }
 
   aasm column: :status, enum: true do
@@ -29,7 +29,7 @@ class Post < ApplicationRecord
     state :delete_by_owner
     state :delete_by_user
     state :block
-    state :update_success
+    state :update_verify
     state :update_fail
 
     event :publish do
@@ -37,11 +37,11 @@ class Post < ApplicationRecord
     end
 
     event :delete_by_owner do
-      transitions from: [:pendding, :published, :decline], to: :delete_by_owner
+      transitions from: [:pendding, :published, :decline, :draft], to: :delete_by_owner
     end
 
     event :delete_by_user do
-      transitions from: [:pendding, :published, :decline], to: :delete_by_user
+      transitions from: [:pendding, :published, :decline, :draft], to: :delete_by_user
     end
   end
 end

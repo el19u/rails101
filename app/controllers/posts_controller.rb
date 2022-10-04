@@ -26,7 +26,12 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      @post.update_post!
+      status = @post.status
+
+      case status
+        when "published"
+          @post.update_verify!
+        end
       redirect_to(group_path(@group), notice: "更新文章成功")
     else
       render "edit"
@@ -39,7 +44,7 @@ class PostsController < ApplicationController
     case status
       when "pendding"
         @post.pendding!
-      redirect_to(group_path(@group), notice: "文章已送審")
+        redirect_to(group_path(@group), notice: "文章已送審")
       when "draft"
         @post.draft!
         redirect_to(group_path(@group), notice: "取消送審")
@@ -61,7 +66,7 @@ class PostsController < ApplicationController
       when "update_fail"
         @post.update_fail!
         redirect_to(@group, alert: "版主拒絕更新文章")
-    end
+      end
   end
 
   private
