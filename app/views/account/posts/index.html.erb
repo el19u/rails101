@@ -17,8 +17,8 @@
           <td><%= post.updated_at %></td>
           <td><%= post_status_message(post.status) %></td>
           <% if post.status == "published" %>
-            <td><%= link_to("編輯", edit_group_post_path(post.group_id, post)) %></td>
-            <td><%= button_to("刪除", manage_group_post_path(post.group.id, post, post: {status: delete_by(current_user, post)}), data: { confirm: "確定要刪除嗎？"})%></td>
+            <td><%= link_to("編輯", edit_account_post_path(post, post: {status: "update_post"})) %></td>
+            <td><%= button_to("刪除", account_post_path(post, post: {status: delete_by(current_user, post)}), method: :delete, data: { confirm: "確定要刪除嗎？"})%></td>
           <% end %>
         </tr>
       <% end %>
