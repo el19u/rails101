@@ -15,8 +15,8 @@ Rails.application.routes.draw do
   end
 
   namespace :account do
-    resources :groups
-    resources :posts
+    resources :groups, only: [:index]
+    resources :posts, only: [:index, :edit, :update, :destroy]
   end
 
   root "groups#index"

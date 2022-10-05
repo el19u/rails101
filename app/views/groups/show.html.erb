@@ -70,10 +70,10 @@
           <% if post.status == "draft" || post.status == "decline" %>
             <td><%= button_to("提交申請", manage_group_post_path(@group, post, post: {status: "pendding"}))%></td>
           <% else %>
-            <td><%= button_to("取消申請審核", manage_group_post_path(@group, post, post: {status: "draft"}))%></td>
+            <td><%= button_to("取消申請審核", manage_group_post_path(@group, post, post: {status: cancel_verify(post.status)}))%></td>
           <% end %>
           <td><%= link_to("編輯", edit_group_post_path(@group, post)) %></td>
-          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: "delete_by_user"}), data: { confirm: "確定要刪除嗎？"})%></td>
+          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_post_at_author_list(post.status)}), data: { confirm: "確定要刪除嗎？"})%></td>
         </tr>
       <% end %>
     </tbody>
@@ -93,7 +93,7 @@
     <tbody>
       <% @posts.each do |post| %>
         <tr>
-          <% if post.status == "published" || post.status == "update_verify" && post.user == current_user || @group.user == current_user %>
+          <% if post.status == "published" || post.user == current_user || @group.user == current_user %>
             <td><%= post.content %></td>
           <% elsif post.status == "update_verify" %>
             <td>文章更新中</td>

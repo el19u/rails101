@@ -4,6 +4,14 @@ module PostsHelper
     post.user == current_user ? "delete_by_user" : "delete_by_owner"
   end
 
+  def delete_post_at_author_list(status)
+    status == "draft" ? "trash" : "delete_by_user"
+  end
+
+  def cancel_verify(status)
+    status == "draft" ? "draft" : "cancel_update_verify"
+  end
+
   def update_success_fail(status)
     if status == "pendding"
       return "declined"
@@ -21,7 +29,8 @@ module PostsHelper
       delete_by_owner: "文章已被群組管理員刪除",
       block: "文章已被管理員封鎖",
       update_verify: "文章更新中",
-      update_fail: "版主拒絕更新文章"
+      update_fail: "版主拒絕更新文章",
+      cancel_update_verify: "使用者取消審核"
     }
 
     status_messages[status]

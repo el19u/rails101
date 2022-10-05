@@ -18,7 +18,8 @@ class Post < ApplicationRecord
     delete_by_user: 5,
     block: 6,
     update_fail: 7,
-    update_verify: 8
+    update_verify: 8,
+    cancel_update_verify: 9,
   }
 
   aasm column: :status, enum: true do
@@ -31,17 +32,18 @@ class Post < ApplicationRecord
     state :block
     state :update_verify
     state :update_fail
+    state :cancel_update_verify
 
     event :publish do
       transitions from: [:pendding, :decline], to: :published
     end
 
     event :delete_by_owner do
-      transitions from: [:pendding, :published, :decline, :draft], to: :delete_by_owner
+      transitions from: [:pendding, :published, :decline, :draft, :update_verify], to: :delete_by_owner
     end
 
     event :delete_by_user do
-      transitions from: [:pendding, :published, :decline, :draft], to: :delete_by_user
+      transitions from: [:pendding, :published, :decline, :draft, :update_verify], to: :delete_by_user
     end
   end
 end

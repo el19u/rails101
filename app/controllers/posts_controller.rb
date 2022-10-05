@@ -32,6 +32,7 @@ class PostsController < ApplicationController
         when "published"
           @post.update_verify!
         end
+
       redirect_to(group_path(@group), notice: "更新文章成功")
     else
       render "edit"
@@ -66,7 +67,13 @@ class PostsController < ApplicationController
       when "update_fail"
         @post.update_fail!
         redirect_to(@group, alert: "版主拒絕更新文章")
-      end
+      when "cancel_update_verify"
+        @post.cancel_update_verify!
+        redirect_to(@group, alert: "使用者取消審核")
+      when "trash"
+        @post.destroy
+        redirect_to(@group, alert: "文章已被使用者刪除")
+    end
   end
 
   private
