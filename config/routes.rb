@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       post :quit
     end
 
-    resources :posts do
+    resources :posts, except: [:destroy] do
       member do
         post :manage
       end
