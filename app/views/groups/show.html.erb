@@ -41,7 +41,7 @@
             <td><%= post.user.email %></td>
             <td><%= post.updated_at %></td>
             <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "publish"}))%></td>
-            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: decline_status(post.status)}))%></td>
+            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: post.pendding? ? "decline" : "update_fail"}))%></td>
           </tr>
         <% end %>
       </tbody>
@@ -66,13 +66,13 @@
           <td><%= post.content %></td>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
-          <% if author_post_lists(post.status) %>
+          <% if post.author_posts? %>
             <td><%= button_to("提交申請", manage_group_post_path(@group, post, post: {status: "pendding"}))%></td>
           <% else %>
-            <td><%= button_to("取消申請審核", manage_group_post_path(@group, post, post: {status: cancel_verify(post.status)}))%></td>
+            <td><%= button_to("取消申請審核", manage_group_post_path(@group, post, post: {status: post.published? ? "cancel_update_verify" : "draft"}))%></td>
           <% end %>
           <td><%= link_to("編輯", edit_group_post_path(@group, post)) %></td>
-          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_post_at_author_list(post.status)}), data: { confirm: "確定要刪除嗎？"})%></td>
+          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: post.draft? ? "trash" : "delete_by_user" }), data: { confirm: "確定要刪除嗎？"})%></td>
         </tr>
       <% end %>
     </tbody>
@@ -92,21 +92,25 @@
     <tbody>
       <% @publish_posts.each do |post| %>
         <tr>
-          <% if read_authorization(post) %>
-            <td><%= post.content %></td>
-          <% else %>
-            <td> - </td>
-          <% end %>
+          <td>
+            <% if read_authorization(post) %>
+              <%= post.content %>
+            <% else %>
+              -
+            <% end %>
+          </td>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
           <td><%= post_status_message(post.status) %></td>
-          <% if post.status == "publish" && current_user_post?(post.user) %>
+          <% if post.editable? && current_user_post?(post.user) %>
             <td><%= link_to("編輯", edit_group_post_path(@group, post, post: {status: "update_post"})) %></td>
-            <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_by(current_user, post)}), data: { confirm: "確定要刪除嗎？"})%></td>
+            <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_by(post.user)}), data: { confirm: "確定要刪除嗎？"})%></td>
           <% end %>
-          <% if group_owner?(@group) && check_post_not_delted(post.status) %>
-            <td><%= button_to("封鎖", manage_group_post_path(@group, post, post: {status: "block"}), data: { confirm: "確定要刪除嗎？"})%></td>
-          <% end %>
+          <td>
+            <% if group_owner?(@group) && post.may_block? %>
+              <%= button_to("封鎖", manage_group_post_path(@group, post, post: {status: "block"}), data: { confirm: "確定要刪除嗎？"})%>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -15,7 +15,8 @@ class Post < ApplicationRecord
     :delete_by_owner,
     :block,
     :update_fail,
-    :update_verify
+    :update_verify,
+    :cancel_update_verify
   ].freeze
 
   CURRENT_USER_STATUS = [
@@ -23,7 +24,6 @@ class Post < ApplicationRecord
     :decline,
     :draft,
     :update_verify,
-    :cancel_update_verify,
     :update_fail
   ].freeze
 
@@ -70,11 +70,11 @@ class Post < ApplicationRecord
     end
 
     event :decline do
-      transitions from: [:pendding], to: :decline
+      transitions from: [:pendding, :delete_by_user], to: :decline
     end
 
     event :delete_by_user do
-      transitions from: [:publish, :update_verify], to: :delete_by_user
+      transitions from: [:publish, :update_verify, :decline, :cancel_update_verify], to: :delete_by_user
     end
 
     event :block do
@@ -86,7 +86,35 @@ class Post < ApplicationRecord
     end
 
     event :update_fail do
-      transitions from: [:update_verify], to: :update_fail
+      transitions from: [:pendding, :draft, :update_verify], to: :update_fail
     end
+
+    event :cancel_update_verify do
+      transitions from: [:update_verify], to: :cancel_update_verify
+    end
+
+    event :update_verify do
+      transitions from: [:cancel_update_verify], to: :update_verify
+    end
+
+    event :block do
+      transitions from: [:cancel_update_verify, :publish], to: :block
+    end
+  end
+
+  def author_posts?
+    decline? || draft? || update_fail? || cancel_update_verify?
+  end
+
+  def viewable?
+    publish? || cancel_update_verify? || delete_by_user?
+  end
+
+  def published?
+    update_verify?
+  end
+
+  def editable?
+    publish? || cancel_update_verify?
   end
 end

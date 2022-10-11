@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   before_action :find_group, only: [:new, :create, :edit, :update, :destroy, :manage]
   before_action :find_post, only: [:edit, :update, :destroy, :manage]
   before_action :check_post_owner, only: [:edit, :update, :destroy]
-
+  before_action :is_group_member?, only: [:new, :create, :edit, :update, :destroy]
 
   def new
     @post = current_user.posts.new
@@ -27,12 +27,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      status = @post.status
-
-      case status
-      when "publish"
-        @post.update_verify!
-      end
+      @post.update_verify! if @post.publish? || @post.cancel_update_verify?
 
       redirect_to(group_path(@group), notice: "更新文章成功")
     else
@@ -98,6 +93,6 @@ class PostsController < ApplicationController
   end
 
   def is_group_member?
-    return redirect_to(@group, alert: "使用者無權限，請先加入群組!") if !current_user.is_member_of?(@group)
+    redirect_to(@group, alert: "使用者無權限，請先加入群組!") if !current_user.is_member_of?(@group)
   end
 end
