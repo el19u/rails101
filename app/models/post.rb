@@ -95,16 +95,12 @@ class Post < ApplicationRecord
     end
   end
 
-  def author_posts?
-    decline? || draft? || update_decline? || cancel_update_verify?
-  end
-
   def viewable?
     publish? || cancel_update_verify? || delete_by_post_author?
   end
 
   def published?
-    update_verify?
+    status.to_sym.in?(PUBLISH_STATUS)
   end
 
   def editable?
