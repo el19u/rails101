@@ -12,103 +12,95 @@ class Post < ApplicationRecord
   PUBLISH_STATUS = [
     :publish,
     :delete_by_owner,
-    :delete_by_user,
+    :delete_by_post_author,
     :block,
-    :update_fail,
+    :update_decline,
     :update_verify,
     :cancel_update_verify
   ].freeze
 
   AUTHOR_MAY_VERIFY_STATUS = [
     :draft,
-    :pendding,
+    :verify,
     :decline,
-    :update_fail,
+    :update_decline,
     :update_verify,
     :cancel_update_verify
   ].freeze
 
   GROUP_OWNER_VERIFYABLE_STATUS = [
-    :pendding,
+    :verify,
     :update_verify
   ].freeze
 
   enum status: {
     draft: 0,
-    pendding: 1,
+    verify: 1,
     publish: 2,
     decline: 3,
     delete_by_owner: 4,
-    delete_by_user: 5,
+    delete_by_post_author: 5,
     block: 6,
-    update_fail: 7,
+    update_decline: 7,
     update_verify: 8,
     cancel_update_verify: 9,
   }
 
   aasm column: :status, enum: true do
     state :draft, initial: true
-    state :pendding
+    state :verify
     state :publish
     state :decline
     state :delete_by_owner
-    state :delete_by_user
+    state :delete_by_post_author
     state :block
     state :update_verify
-    state :update_fail
+    state :update_decline
     state :cancel_update_verify
 
     event :draft do
-      transitions from: [:pendding, :update_verify], to: :draft
+      transitions from: :verify, to: :draft
     end
 
-    event :pendding do
-      transitions from: [:draft, :update_fail, :decline], to: :pendding
+    event :verify do
+      transitions from: [:draft, :decline], to: :verify
     end
 
     event :publish do
-      transitions from: [:pendding, :update_verify], to: :publish
+      transitions from: [:verify, :update_verify], to: :publish
     end
 
     event :decline do
-      transitions from: [:pendding, :delete_by_user], to: :decline
+      transitions from: :verify, to: :decline
     end
 
-    event :delete_by_user do
-      transitions from: [:publish, :update_verify, :decline, :cancel_update_verify], to: :delete_by_user
+    event :delete_by_post_author do
+      transitions from: [:publish, :update_verify, :update_decline, :cancel_update_verify], to: :delete_by_post_author
     end
 
     event :block do
-      transitions from: [:publish, :update_fail, :update_verify], to: :block
+      transitions from: [:publish, :cancel_update_verify], to: :block
     end
 
     event :update_verify do
-      transitions from: [:publish], to: :update_verify
+      transitions from: [:publish, :update_verify, :update_decline, :cancel_update_verify], to: :update_verify
     end
 
-    event :update_fail do
-      transitions from: [:pendding, :draft, :update_verify], to: :update_fail
+    event :update_decline do
+      transitions from: :update_verify, to: :update_decline
     end
 
     event :cancel_update_verify do
-      transitions from: [:update_verify], to: :cancel_update_verify
-    end
-
-    event :update_verify do
-      transitions from: [:cancel_update_verify], to: :update_verify
-    end
-
-    event :block do
-      transitions from: [:cancel_update_verify, :publish], to: :block
+      transitions from: :update_verify, to: :cancel_update_verify
     end
   end
 
   def author_posts?
-    decline? || draft? || update_fail? || cancel_update_verify?
+    decline? || draft? || update_decline? || cancel_update_verify?
   end
 
   def viewable?
-    publish? || cancel_update_verify? || delete_by_user?
+    publish? || cancel_update_verify? || delete_by_post_author?
   end
 
   def published?

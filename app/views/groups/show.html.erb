@@ -41,7 +41,7 @@
             <td><%= post.user.email %></td>
             <td><%= post.updated_at %></td>
             <td><%= button_to("審核通過", manage_group_post_path(@group, post, post:{status: "publish"}))%></td>
-            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: post.pendding? ? "decline" : "update_fail"}))%></td>
+            <td><%= button_to("審核失敗", manage_group_post_path(@group, post, post:{status: post.verify? ? "decline" : "update_decline"}))%></td>
           </tr>
         <% end %>
       </tbody>
@@ -67,12 +67,12 @@
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
           <% if post.author_posts? %>
-            <td><%= button_to("提交申請", manage_group_post_path(@group, post, post: {status: "pendding"}))%></td>
+            <td><%= button_to("提交申請", manage_group_post_path(@group, post, post: {status: "verify"}))%></td>
           <% else %>
             <td><%= button_to("取消申請審核", manage_group_post_path(@group, post, post: {status: post.published? ? "cancel_update_verify" : "draft"}))%></td>
           <% end %>
           <td><%= link_to("編輯", edit_group_post_path(@group, post)) %></td>
-          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: post.draft? ? "trash" : "delete_by_user" }), data: { confirm: "確定要刪除嗎？"})%></td>
+          <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: post.draft? ? "trash" : "delete_by_post_author" }), data: { confirm: "確定要刪除嗎？"})%></td>
         </tr>
       <% end %>
     </tbody>

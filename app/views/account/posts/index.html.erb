@@ -18,7 +18,7 @@
           <td><%= post_status_message(post.status) %></td>
           <% if post.status == "publish" %>
             <td><%= link_to("編輯", edit_account_post_path(post, post: {status: "update_post"})) %></td>
-            <td><%= button_to("刪除", account_post_path(post, post: {status: "delete_by_user" }), method: :delete, data: { confirm: "確定要刪除嗎？"})%></td>
+            <td><%= button_to("刪除", account_post_path(post, post: {status: "delete_by_post_author" }), method: :delete, data: { confirm: "確定要刪除嗎？"})%></td>
           <% end %>
         </tr>
       <% end %>

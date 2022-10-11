@@ -22,7 +22,7 @@ class Account::PostsController < ApplicationController
   end
 
   def destroy
-    @post.delete_by_user!
+    @post.delete_by_post_author!
 
     redirect_to(account_posts_path, alert: "文章已被刪除")
   end

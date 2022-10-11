@@ -39,8 +39,8 @@ class PostsController < ApplicationController
     status = post_params[:status]
 
     case status
-    when "pendding"
-      @post.pendding!
+    when "verify"
+      @post.verify!
       redirect_to(group_path(@group), notice: "文章已送審")
     when "draft"
       @post.draft!
@@ -54,14 +54,14 @@ class PostsController < ApplicationController
     when "delete_by_owner"
       @post.delete_by_owner!
       redirect_to(@group, alert: "文章已被群組管理員刪除")
-    when "delete_by_user"
-      @post.delete_by_user!
+    when "delete_by_post_author"
+      @post.delete_by_post_author!
       redirect_to(@group, alert: "文章已被使用者刪除")
     when "block"
       @post.block!
       redirect_to(@group, alert: "文章已被管理員封鎖")
-    when "update_fail"
-      @post.update_fail!
+    when "update_decline"
+      @post.update_decline!
       redirect_to(@group, alert: "版主拒絕更新文章")
     when "cancel_update_verify"
       @post.cancel_update_verify!
