@@ -10,8 +10,8 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @owner_verify_posts = @group.posts.where(status: [Post::OWNER_STATUS]).includes(:user).recent
-    @current_user_posts = @group.posts.where(status: [Post::CURRENT_USER_STATUS], user: current_user).includes(:user).recent
+    @group_owner_verify_posts = @group.posts.where(status: [Post::GROUP_OWNER_VERIFYABLE_STATUS]).includes(:user).recent
+    @author_verifyable_posts = @group.posts.where(status: [Post::AUTHOR_MAY_VERIFY_STATUS], user: current_user).includes(:user).recent
     @publish_posts = @group.posts.where(status: [Post::PUBLISH_STATUS]).includes(:user).recent.page(params[:page]).per(20)
   end
 

@@ -11,23 +11,24 @@ class Post < ApplicationRecord
 
   PUBLISH_STATUS = [
     :publish,
-    :delete_by_user,
     :delete_by_owner,
+    :delete_by_user,
     :block,
     :update_fail,
     :update_verify,
     :cancel_update_verify
   ].freeze
 
-  CURRENT_USER_STATUS = [
+  AUTHOR_MAY_VERIFY_STATUS = [
+    :draft,
     :pendding,
     :decline,
-    :draft,
+    :update_fail,
     :update_verify,
-    :update_fail
+    :cancel_update_verify
   ].freeze
 
-  OWNER_STATUS = [
+  GROUP_OWNER_VERIFYABLE_STATUS = [
     :pendding,
     :update_verify
   ].freeze

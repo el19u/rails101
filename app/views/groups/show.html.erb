@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @owner_verify_posts.each do |post| %>
+        <% @group_owner_verify_posts.each do |post| %>
           <tr>
             <td><%= post.content %></td>
             <td><%= post.user.email %></td>
@@ -60,7 +60,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @current_user_posts.each do |post| %>
+      <% @author_verifyable_posts.each do |post| %>
         <tr>
           <td><%= post.status %></td>
           <td><%= post.content %></td>
