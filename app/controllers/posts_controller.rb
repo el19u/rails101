@@ -27,7 +27,7 @@ class PostsController < ApplicationController
 
   def update
     if @post.update(post_params)
-      @post.update_verify! if @post.publish? || @post.cancel_update_verify?
+      @post.update_verify!
 
       redirect_to(group_path(@group), notice: "更新文章成功")
     else
@@ -39,21 +39,18 @@ class PostsController < ApplicationController
     status = post_params[:status]
 
     case status
-    when "verify"
-      @post.verify!
-      redirect_to(group_path(@group), notice: "文章已送審")
     when "draft"
       @post.draft!
       redirect_to(group_path(@group), notice: "取消送審")
+    when "verify"
+      @post.verify!
+      redirect_to(group_path(@group), notice: "文章已送審")
     when "publish"
       @post.publish!
       redirect_to(@group, notice: "文章通過審核")
     when "decline"
       @post.decline!
       redirect_to(@group, alert: "文章不通過審核")
-    when "delete_by_owner"
-      @post.delete_by_owner!
-      redirect_to(@group, alert: "文章已被群組管理員刪除")
     when "delete_by_post_author"
       @post.delete_by_post_author!
       redirect_to(@group, alert: "文章已被使用者刪除")

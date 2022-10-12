@@ -19,11 +19,11 @@
       <%= link_to("新增文章", new_group_post_path(@group), class: "btn btn-default float-end" ) %>
     <% end %>
   </div>
-  <% if current_user && current_user == @group.user %>
+  <% if current_user && @group.owner?(current_user) %>
     <%= link_to("編輯", edit_group_path(@group), class: "btn btn-primary float-end") %>
   <% end %>
 
-  <% if @group.user == current_user %>
+  <% if @group.owner?(current_user) %>
     <h2>待審核文章（管理員）</h2>
     <table class="table">
       <thead>
@@ -85,30 +85,28 @@
         <th>作者</th>
         <th>時間</th>
         <th>文章狀態</th>
-        <th colspan="5">操作</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
       <% @publish_posts.each do |post| %>
         <tr>
-          <td>
-            <% if read_authorization(post) %>
-              <%= post.content %>
-            <% else %>
-              -
-            <% end %>
-          </td>
+          <td><%= read_authorization?(post) ? post.content : "-" %></td>
           <td><%= post.user.email %></td>
           <td><%= post.updated_at %></td>
           <td><%= post_status_message(post.status) %></td>
-          <% if post.editable? && current_user_post?(post.user) %>
-            <td><%= link_to("編輯", edit_group_post_path(@group, post, post: {status: "update_post"})) %></td>
-            <td><%= button_to("刪除", manage_group_post_path(@group, post, post: {status: delete_by(post.user)}), data: { confirm: "確定要刪除嗎？"})%></td>
-          <% end %>
           <td>
-            <% if group_owner?(@group) && post.may_block? %>
-              <%= button_to("封鎖", manage_group_post_path(@group, post, post: {status: "block"}), data: { confirm: "確定要刪除嗎？"})%>
-            <% end %>
+            <div style="display: flex;">
+              <% if post.author?(current_user) && post.may_update_verify? %>
+                <%= button_to("編輯", edit_group_post_path(@group, post), method: :get) %>
+              <% end %>
+              <% if post.author?(current_user) && post.may_delete_by_post_author? %>
+                <%= button_to("刪除", manage_group_post_path(@group, post, post: { status: "delete_by_post_author" }), data: { confirm: "確定要刪除嗎？" })%>
+              <% end %>
+              <% if @group.owner?(current_user) && post.may_block? %>
+                <%= button_to("封鎖", manage_group_post_path(@group, post, post: { status: "block" }), data: { confirm: "確定要刪除嗎？" })%>
+              <% end %>
+            </div>
           </td>
         </tr>
       <% end %>

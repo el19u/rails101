@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 class GroupsController < ApplicationController
-  before_action(:find_group, only: [:show, :edit, :update, :destroy, :join, :quit])
-  before_action(:authenticate_user!, only: [:new, :create, :edit, :update, :destroy])
-  before_action(:check_owner, only: [:edit, :update, :destroy])
-  before_action(:authenticate_user!, only: [:join, :quit])
+  before_action :find_group, only: [:show, :edit, :update, :destroy, :join, :quit]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy, :join, :quit]
+  before_action :check_owner, only: [:edit, :update, :destroy]
 
   def index
     @groups = Group.includes(:user).recent
@@ -79,6 +78,6 @@ class GroupsController < ApplicationController
   end
 
   def check_owner
-    return redirect_to(root_path, alert: "使用者無權限，請先加入群組") if current_user != @group.user
+    redirect_to(root_path, alert: "使用者無權限") if !@group.owner?(current_user)
   end
 end

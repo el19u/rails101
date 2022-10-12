@@ -11,7 +11,6 @@ class Post < ApplicationRecord
 
   PUBLISH_STATUS = [
     :publish,
-    :delete_by_owner,
     :delete_by_post_author,
     :block,
     :update_decline,
@@ -38,7 +37,6 @@ class Post < ApplicationRecord
     verify: 1,
     publish: 2,
     decline: 3,
-    delete_by_owner: 4,
     delete_by_post_author: 5,
     block: 6,
     update_decline: 7,
@@ -51,7 +49,6 @@ class Post < ApplicationRecord
     state :verify
     state :publish
     state :decline
-    state :delete_by_owner
     state :delete_by_post_author
     state :block
     state :update_verify
@@ -93,6 +90,10 @@ class Post < ApplicationRecord
     event :cancel_update_verify do
       transitions from: :update_verify, to: :cancel_update_verify
     end
+  end
+
+  def author?(the_user)
+    the_user == user
   end
 
   def viewable?

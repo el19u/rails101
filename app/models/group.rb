@@ -8,4 +8,8 @@ class Group < ApplicationRecord
   validates :title, presence: true
 
   scope :recent, -> { order(updated_at: :desc) }
+
+  def owner?(the_user)
+    the_user == user
+  end
 end
