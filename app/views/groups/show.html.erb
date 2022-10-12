@@ -83,7 +83,8 @@
       <tr>
         <th>文章內容</th>
         <th>作者</th>
-        <th>時間</th>
+        <th>發佈時間</th>
+        <th>更新時間</th>
         <th>文章狀態</th>
         <th>操作</th>
       </tr>
@@ -93,6 +94,7 @@
         <tr>
           <td><%= read_authorization?(post) ? post.content : "-" %></td>
           <td><%= post.user.email %></td>
+          <td><%= post.published_at %></td>
           <td><%= post.updated_at %></td>
           <td><%= post_status_message(post.status) %></td>
           <td>

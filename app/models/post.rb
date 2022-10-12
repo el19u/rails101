@@ -7,7 +7,8 @@ class Post < ApplicationRecord
 
   validates :content, presence: true
 
-  scope :recent, -> { order(updated_at: :desc) }
+  scope :recent_updated, -> { order(updated_at: :desc) }
+  scope :recent_published, -> { order(published_at: :desc) }
 
   PUBLISH_STATUS = [
     :publish,
@@ -63,7 +64,7 @@ class Post < ApplicationRecord
       transitions from: [:draft, :decline], to: :verify
     end
 
-    event :publish do
+    event :publish, after: :stamp_published_date do
       transitions from: [:verify, :update_verify], to: :publish
     end
 
@@ -106,5 +107,9 @@ class Post < ApplicationRecord
 
   def editable?
     publish? || cancel_update_verify?
+  end
+
+  def stamp_published_date
+    update(published_at: Time.zone.now)
   end
 end
