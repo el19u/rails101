@@ -38,8 +38,6 @@ class Account::PostsController < ApplicationController
   end
 
   def check_post_owner
-    if current_user != @post.user
-      redirect_to(root_path, alert: "你沒有權限修改此文章")
-    end
+    redirect_to(root_path, alert: "你沒有權限修改此文章") if !@post.author?(current_user)
   end
 end
