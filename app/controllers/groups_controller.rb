@@ -6,11 +6,13 @@ class GroupsController < ApplicationController
   before_action(:authenticate_user!, only: [:join, :quit])
 
   def index
-    @groups = Group.recent
+    @groups = Group.includes(:user).recent
   end
 
   def show
-    @posts = @group.posts.recent.page(params[:page]).per(5)
+    @owner_verify_posts = @group.posts.where(status: [Post::OWNER_STATUS]).includes(:user).recent
+    @current_user_posts = @group.posts.where(status: [Post::CURRENT_USER_STATUS], user: current_user).includes(:user).recent
+    @publish_posts = @group.posts.where(status: [Post::PUBLISH_STATUS]).includes(:user).recent.page(params[:page]).per(20)
   end
 
   def new

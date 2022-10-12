@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.7.2"
 
+gem "aasm"
 gem "jbuilder", "~> 2.7"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
@@ -32,6 +33,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "bullet"
   gem "listen", "~> 3.3"
   gem "pry-rails", "~> 0.3.6"
   gem "rack-mini-profiler", "~> 2.0"

@@ -7,12 +7,16 @@ Rails.application.routes.draw do
       post :quit
     end
 
-    resources :posts
+    resources :posts, except: [:destroy] do
+      member do
+        post :manage
+      end
+    end
   end
 
   namespace :account do
-    resources :groups
-    resources :posts
+    resources :groups, only: [:index]
+    resources :posts, only: [:index, :edit, :update, :destroy]
   end
 
   root "groups#index"
